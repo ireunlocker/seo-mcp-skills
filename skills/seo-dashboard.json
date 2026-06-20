@@ -1,0 +1,21 @@
+{
+  "name": "seo_dashboard",
+  "description": "Reportes de performance SEO y análisis de métricas para sitios web. Actívalo cuando el usuario pida un reporte SEO, revisar resultados, analizar datos de Google Search Console o GA4, ver evolución de posiciones, clics o impresiones de keywords, interpretar métricas o preparar un informe. Triggers: reporte SEO, informe, métricas, GSC, Google Search Console, GA4, posiciones, clics, impresiones, performance, resultados, evolución, análisis de tráfico.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "report_markdown": {
+        "type": "string",
+        "description": "El análisis SEO detallado, escrito en formato Markdown, explicando tendencias, insights y próximos pasos a partir de los datos."
+      },
+      "suggested_actions": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Lista de acciones SEO a tomar basadas en los datos."
+      }
+    },
+    "required": ["report_markdown", "suggested_actions"]
+  }
+}

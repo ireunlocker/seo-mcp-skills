@@ -1,0 +1,16 @@
+# Claves API y credenciales
+.env
+inputs/.env
+inputs/*.json
+inputs/credentials/
+
+# Base de datos local
+outputs/seo_history.db
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Archivos del sistema
+.DS_Store

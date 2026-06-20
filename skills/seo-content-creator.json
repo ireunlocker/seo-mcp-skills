@@ -1,0 +1,22 @@
+{
+  "name": "seo_content_creator",
+  "description": "Creación y optimización de contenido SEO para sitios web con el objetivo de posicionar en Google. Actívalo cuando el usuario pida escribir un artículo, optimizar una página de servicios, crear contenido web, redactar meta títulos o descripciones, mejorar headings, o cualquier tarea de escritura orientada a SEO. Triggers: escribir artículo, crear contenido, optimizar página, blog post, meta título, meta descripción, heading, H1, H2, contenido SEO, redactar, keyword research.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "slug": {
+        "type": "string",
+        "description": "El slug de la URL recomendada (ej: servicios-profesionales-madrid)"
+      },
+      "title": {
+        "type": "string",
+        "description": "El título optimizado del artículo."
+      },
+      "content_mdx": {
+        "type": "string",
+        "description": "El código fuente del artículo redactado en MDX. Debe incluir headings, jerarquía y contenido de alta calidad."
+      }
+    },
+    "required": ["slug", "title", "content_mdx"]
+  }
+}
