@@ -18,6 +18,10 @@ Sistema autónomo de auditoría, monitoreo y optimización SEO que combina intel
 - [🔌 Modo MCP Avanzado](#-modo-mcp-avanzado)
 - [📚 Sistema de Auto-Aprendizaje](#-sistema-de-auto-aprendizaje)
 - [🌐 Integración con Proyectos Web](#-integración-con-proyectos-web)
+- [📋 Guías y Documentación](#-guías-y-documentación)
+  - [🧪 Pruebas y Resultados (docs/TESTING.md)](docs/TESTING.md)
+  - [🔧 Guía de Adaptación Multi-Proyecto (docs/ADAPTATION.md)](docs/ADAPTATION.md)
+  - [🐳 Despliegue y CORS (docs/DEPLOY.md)](docs/DEPLOY.md)
 - [➕ Cómo Agregar Más Sitios Web al Mismo Sistema](#-cómo-agregar-más-sitios-web-al-mismo-sistema)
 - [🐳 Despliegue en Servidor (Docker)](#-despliegue-en-servidor-docker)
 - [📤 Subir a GitHub](#-subir-a-github)
@@ -1058,6 +1062,44 @@ EOF
 
 ---
 
+## 📋 Guías y Documentación
+
+Además de este README, el proyecto incluye documentación detallada para casos de uso específicos:
+
+### 🧪 Pruebas y Resultados Reales — [`docs/TESTING.md`](docs/TESTING.md)
+Resultados de 2 meses de pruebas en 2 nichos diferentes (E-commerce y Generación de Leads):
+- Tablas semana a semana con evolución de tráfico orgánico, keywords y CTR
+- Comparativa de rendimiento entre nichos
+- KPIs clave observados
+- **Qué funciona, qué no, y qué está en desarrollo**
+- Lecciones aprendidas para maximizar resultados
+
+### 🔧 Guía de Adaptación Multi-Proyecto — [`docs/ADAPTATION.md`](docs/ADAPTATION.md)
+Cómo personalizar SEO MCP Skill para cada proyecto o cliente:
+- 3 opciones para gestionar múltiples proyectos (env separados, Python runner, Docker)
+- Tabla de archivos a modificar por proyecto
+- Cómo agregar skills nuevos (5 pasos con templates)
+- Cómo cambiar el modelo de IA
+- Adaptación de prompts para diferentes nichos (e-commerce, lead-gen, blogs)
+- Ejemplo completo: adaptar para una inmobiliaria
+
+### 🐳 Despliegue Completo — [`docs/DEPLOY.md`](docs/DEPLOY.md)
+Guía exhaustiva para poner el sistema en producción:
+- Docker Compose con healthcheck y límites de recursos
+- Servicio systemd para VPS Linux
+- Configuración de CORS en Express y FastAPI
+- **Flujo Git automático**: Agent Push → GitHub → Webhook/Cron → Server Pull
+- Script de webhook server para git pull automático
+- CI/CD completo con GitHub Actions
+- Seguridad, logs y troubleshooting de despliegue
+
+### Scripts Auxiliares
+
+| Script | Descripción |
+|---|---|
+| `scripts/multi_project_runner.py` | Ejecuta el orquestador para múltiples proyectos secuencialmente |
+| `scripts/git_pull_webhook.py` | Servidor webhook que recibe push de GitHub y ejecuta git pull en producción |
+
 ## 🛠️ Solución de Problemas
 
 ### Error: "OPENROUTER_API_KEY no encontrada"
@@ -1202,5 +1244,5 @@ ls -la /ruta/a/tu/proyecto
 <p align="center">
   <strong>SEO MCP Skill</strong> — Creado por <strong>Kerwyn Arias</strong><br>
   <em>Sistema de Automatización SEO con Inteligencia Artificial</em><br>
-  GitHub: <a href="https://github.com/tuusuario/seo-mcp-skill">github.com/tuusuario/seo-mcp-skill</a>
+  GitHub: <a href="https://github.com/torquemadaIA/seo-mcp-skills">github.com/torquemadaIA/seo-mcp-skills</a>
 </p>
