@@ -248,7 +248,7 @@ Para que el sistema funcione completamente, necesitas:
 ### 1. Clonar o descargar
 
 ```bash
-git clone https://github.com/tuusuario/seo-mcp-skill.git
+git clone https://github.com/ireunlocker/seo-mcp-skills.git
 cd seo-mcp-skill
 ```
 
@@ -997,7 +997,7 @@ git commit -m "Primer commit: SEO MCP Skill - Sistema completo de automatizació
 git branch -M main
 
 # Añadir repositorio remoto
-git remote add origin https://github.com/tuusuario/seo-mcp-skill.git
+git remote add origin https://github.com/ireunlocker/seo-mcp-skills.git
 
 # Subir
 git push -u origin main
@@ -1022,7 +1022,7 @@ git push -u origin main
 ### 2. Push del código
 
 ```bash
-git remote add origin https://github.com/tuusuario/seo-mcp-skill.git
+git remote add origin https://github.com/ireunlocker/seo-mcp-skills.git
 git push -u origin main
 ```
 
@@ -1244,5 +1244,5 @@ ls -la /ruta/a/tu/proyecto
 <p align="center">
   <strong>SEO MCP Skill</strong> — Creado por <strong>Kerwyn Arias</strong><br>
   <em>Sistema de Automatización SEO con Inteligencia Artificial</em><br>
-  GitHub: <a href="https://github.com/torquemadaIA/seo-mcp-skills">github.com/torquemadaIA/seo-mcp-skills</a>
+  GitHub: <a href="https://github.com/ireunlocker/seo-mcp-skills">github.com/ireunlocker/seo-mcp-skills</a>
 </p>
