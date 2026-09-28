@@ -1,16 +1,97 @@
-# Claves API y credenciales
+# SEO MCP Skills - Git Ignore Rules
+
+# =============================================================================
+# Environment & Secrets (NEVER commit these)
+# =============================================================================
 .env
+.env.local
+.env.*.local
 inputs/.env
+inputs/.env.*
+config/.env
+config/.env.*
+
+# Google Service Account keys
 inputs/*.json
-inputs/credentials/
+config/*.json
+*.service-account.json
+*service-account*.json
 
-# Base de datos local
-outputs/seo_history.db
+# =============================================================================
+# Outputs & Logs
+# =============================================================================
+outputs/
+*.log
+*.db
+*.sqlite
+*.sqlite3
+seo_history.db
+seo_orchestrator.log
+scheduler.log
+scheduler-error.log
 
-# Python
+# =============================================================================
+# Python Cache & Virtual Environments
+# =============================================================================
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
 .venv/
+venv/
+env/
+ENV/
+pip-wheel-metadata/
 
-# Archivos del sistema
+# =============================================================================
+# IDE & Editor Files
+# =============================================================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 .DS_Store
+Thumbs.db
+
+# =============================================================================
+# Docker
+# =============================================================================
+.docker/
+
+# =============================================================================
+# Distribution / Packaging
+# =============================================================================
+dist/
+build/
+*.egg-info/
+*.egg
+
+# =============================================================================
+# Jupyter Notebooks
+# =============================================================================
+.ipynb_checkpoints/
+
+# =============================================================================
+# Testing
+# =============================================================================
+.coverage
+.tox/
+nosetests.xml
+test-results.xml
+
+# =============================================================================
+# Project Specific
+# =============================================================================
+# Multi-project env files
+inputs/.env-*
+!inputs/.env.example
+
+# Articulos & experiments output
+articulos/*.md
+experiments/**/*.tsv
+experiments/**/*.png
