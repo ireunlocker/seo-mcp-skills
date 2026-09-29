@@ -1,11 +1,15 @@
-FROM python:3.12-slim
+# SEO MCP Skills - Docker Image
+# Supports multiple run modes via entrypoint
 
-WORKDIR /app
+FROM python:3.12-slim
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
+    curl \
     && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
 
 # Install Python dependencies
 COPY requirements.txt .
@@ -17,5 +21,10 @@ COPY . .
 # Create input/output directories
 RUN mkdir -p inputs outputs
 
+# Entrypoint script for flexible command handling
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+ENTRYPOINT ["docker-entrypoint.sh"]
 # Default: run scheduler
-CMD ["python3", "scripts/orchestrator.py", "schedule"]
+CMD ["schedule"]

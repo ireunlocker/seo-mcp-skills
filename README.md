@@ -981,6 +981,214 @@ Para un despliegue en producción, ten en cuenta:
 
 ---
 
+## 🐳 Desarrollo Local con Docker (Multi-Dominio)
+
+### Estructura de Archivos para Múltiples Dominios
+
+El sistema soporta ejecutar múltiples dominios simultáneamente usando Docker Compose con configuraciones aisladas:
+
+```
+seo-mcp-skill/
+├── docker-compose.yml              # Configuración base
+├── docker-compose.override.yml     # Auto-generado (no commitear)
+├── inputs/
+│   ├── .env.domain1                # Config dominio 1
+│   ├── .env.domain2                # Config dominio 2
+│   ├── ga4-domain1.json            # Credenciales GA4 dominio 1
+│   ├── gsc-domain1.json            # Credenciales GSC dominio 1
+│   └── ...
+├── project-domain-1/               # Proyecto web dominio 1 (montado RW)
+├── project-domain-2/               # Proyecto web dominio 2 (montado RW)
+├── outputs-domain-1/               # Outputs aislados dominio 1
+├── outputs-domain-2/               # Outputs aislados dominio 2
+└── docs/examples/                  # Plantillas de ejemplo
+    ├── docker-compose-multi-domain.yml
+    ├── env.domain1.example
+    ├── env.domain2.example
+    └── env.domain3.example
+```
+
+### Setup Rápido Multi-Dominio
+
+**Opción 1: Script interactivo (recomendado)**
+
+```bash
+# Ejecutar script de configuración
+./setup-multi-domain.sh
+
+# Te preguntará cuántos dominios y sus datos
+# Genera docker-compose.override.yml automáticamente
+
+# Levantar todos los dominios
+docker compose -f docker-compose.yml -f docker-compose.override.yml up -d
+```
+
+**Opción 2: Manual con plantillas**
+
+```bash
+# 1. Copiar plantillas de ejemplo
+mkdir -p inputs
+cp docs/examples/env.domain1.example inputs/.env.domain1
+cp docs/examples/env.domain2.example inputs/.env.domain2
+
+# 2. Editar cada .env con tus API keys reales
+nano inputs/.env.domain1
+nano inputs/.env.domain2
+
+# 3. Colocar credenciales Google (GA4 + GSC) en inputs/
+# 4. Montar tus proyectos web en project-domain-1/, project-domain-2/
+
+# 5. Usar docker-compose multi-dominio
+docker compose -f docs/examples/docker-compose-multi-domain.yml up -d
+```
+
+### Comandos Docker Útiles
+
+```bash
+# Construir imagen
+docker compose build
+
+# Ver logs de todos los dominios
+docker compose -f docker-compose.yml -f docker-compose.override.yml logs -f
+
+# Ver logs de un dominio específico
+docker compose logs -f seo-agent-domain1
+
+# Ejecutar comando puntual en un dominio
+docker compose exec seo-agent-domain1 python scripts/orchestrator.py monitor
+docker compose exec seo-agent-domain1 python scripts/orchestrator.py test-openrouter
+
+# Entrar al contenedor (shell interactivo)
+docker compose exec seo-agent-domain1 shell
+
+# Ejecutar Universal SEO Agent con MCP
+docker compose exec seo-agent-domain1 universal
+
+# Detener todos
+docker compose -f docker-compose.yml -f docker-compose.override.yml down
+
+# Reconstruir tras cambios en código
+docker compose build --no-cache && docker compose up -d
+```
+
+### Variables de Entorno por Dominio
+
+Cada dominio usa su propio `.env` aislado:
+
+| Variable | Descripción | Ejemplo |
+|----------|-------------|---------|
+| `PROJECT_DOMAIN` | Dominio para logging/identificación | `miseguro.com` |
+| `PROJECT_PATH` | Ruta del proyecto web en contenedor | `/app/project` |
+| `GA4_CREDENTIALS_PATH` | JSON credenciales GA4 | `/app/inputs/ga4-domain1.json` |
+| `GA4_PROPERTY_ID` | ID propiedad GA4 | `123456789` |
+| `GSC_CREDENTIALS_PATH` | JSON credenciales GSC | `/app/inputs/gsc-domain1.json` |
+| `GSC_SITE_URL` | URL sitio en GSC | `https://www.miseguro.com/` |
+| `SCHEDULE_MONITOR` | Hora reporte diario | `08:00` |
+| `SCHEDULE_AUDIT` | Horas auditorías | `10:00,22:00` |
+
+### Entrypoint Flexible
+
+El `Dockerfile` incluye `docker-entrypoint.sh` para ejecutar distintos modos:
+
+```bash
+# Modo scheduler (por defecto)
+docker compose up -d
+
+# Un solo ciclo de monitoreo
+docker compose run --rm seo-mcp-agent monitor
+
+# Test conexiones IA
+docker compose run --rm seo-mcp-agent test-openrouter
+docker compose run --rm seo-mcp-agent test-gemini
+
+# Universal SEO Agent (requiere MCP servers)
+docker compose run --rm -e RUN_UNIVERSAL_AGENT=1 seo-mcp-agent universal
+
+# Shell interactivo
+docker compose run --rm seo-mcp-agent shell
+
+# Inicializar BD
+docker compose run --rm seo-mcp-agent init-db
+
+# Tests
+docker compose run --rm seo-mcp-agent test
+```
+
+### MCP en Docker (Avanzado)
+
+Para usar MCP (Puppeteer, GSC server) en Docker:
+
+```yaml
+# En docker-compose.override.yml agregar:
+services:
+  seo-agent-domain1:
+    # ... config existente ...
+    environment:
+      - TZ=Europe/Madrid
+      - MCP_SERVERS=[{"name":"browser","command":"npx","args":["-y","@modelcontextprotocol/server-puppeteer"]}]
+    # Para Puppeteer necesitas:
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - seccomp:unconfined
+```
+
+> **Nota**: Puppeteer en Docker requiere `--cap-add=SYS_ADMIN` y configuración de seccomp. Ver `docs/examples/` para configuración completa.
+
+---
+
+## 📋 Referencia Rápida de Comandos
+
+| Comando | Descripción |
+|---------|-------------|
+| `docker compose build` | Construir imagen |
+| `docker compose up -d` | Levantar en background |
+| `docker compose logs -f` | Ver logs |
+| `docker compose exec <service> monitor` | Ciclo único monitoreo |
+| `docker compose exec <service> test-openrouter` | Test OpenRouter |
+| `docker compose exec <service> universal` | Agente MCP |
+| `docker compose down` | Parar y limpiar |
+
+---
+
+## 🛠️ Solución de Problemas Docker
+
+### Error: "Permission denied" al escribir en project/
+```bash
+# En host: dar permisos al directorio del proyecto
+sudo chown -R 1000:1000 ./project-domain-1
+# O en Dockerfile: USER root (no recomendado para prod)
+```
+
+### Error: "GA4 credentials not found"
+```bash
+# Verificar montaje correcto
+docker compose exec seo-agent-domain1 ls -la /app/inputs/
+# Debe existir ga4-credentials.json
+```
+
+### Error: "MCP connection failed" (Puppeteer)
+```bash
+# Verificar que el contenedor tiene capacidades
+docker compose exec seo-agent-domain1 npx -y @modelcontextprotocol/server-puppeteer --help
+# Requiere: cap_add: SYS_ADMIN, security_opt: seccomp:unconfined
+```
+
+### Out of Memory
+```bash
+# Limitar memoria en docker-compose.yml
+services:
+  seo-agent-domain1:
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+```
+
+---
+
+## 📝 Cómo Registrar tu Proyecto
+
 ## 📤 Subir a GitHub
 
 Para compartir o respaldar tu proyecto en GitHub:

@@ -1,0 +1,47 @@
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Git
+.git/
+
+# Logs
+*.log
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Local
+.env
+*.db
+*.sqlite
+*.sqlite3
+outputs/seo_history.db
+
+# Docker
+.docker/
+
+# Make
+docker-compose.override.yml

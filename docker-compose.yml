@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  # Main service for single project or development
+  seo-mcp-agent:
+    build: .
+    container_name: seo-mcp-agent
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./inputs:/app/inputs
+      - ./outputs:/app/outputs
+      - ./config:/app/config
+      - ./skills:/app/skills
+      - ./prompts:/app/prompts
+      - ./scripts:/app/scripts
+      - ./docs:/app/docs
+      # Mount your web project here (change path as needed)
+      # - /path/to/your/web/project:/app/project:rw
+    environment:
+      - TZ=Europe/Madrid
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    networks:
+      - seo-network
+
+networks:
+  seo-network:
+    driver: bridge
+
+# Usage examples:
+# docker compose up -d                    # Run single instance
+# docker compose -f docs/examples/docker-compose-multi-domain.yml up -d  # Run multi-domain

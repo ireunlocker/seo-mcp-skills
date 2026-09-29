@@ -1,0 +1,60 @@
+# Docker Compose for Multi-Domain SEO MCP Setup
+# Usage: Each domain gets its own service with isolated config
+
+version: '3.8'
+
+services:
+  # Domain 1 - Primary Site
+  seo-agent-domain1:
+    build: .
+    container_name: seo-mcp-domain-1
+    volumes:
+      - ./inputs/.env.domain1:/app/.env:ro
+      - ./inputs/ga4-domain1.json:/app/inputs/ga4-credentials.json:ro
+      - ./inputs/gsc-domain1.json:/app/inputs/gsc-credentials.json:ro
+      - ./project-domain-1:/app/project:rw
+      - ./outputs-domain-1:/app/outputs
+    environment:
+      - TZ=Europe/Madrid
+      - PROJECT_DOMAIN=domain1.com
+    restart: unless-stopped
+    networks:
+      - seo-network
+
+  # Domain 2 - Secondary Site
+  seo-agent-domain2:
+    build: .
+    container_name: seo-mcp-domain-2
+    volumes:
+      - ./inputs/.env.domain2:/app/.env:ro
+      - ./inputs/ga4-domain2.json:/app/inputs/ga4-credentials.json:ro
+      - ./inputs/gsc-domain2.json:/app/inputs/gsc-credentials.json:ro
+      - ./project-domain-2:/app/project:rw
+      - ./outputs-domain-2:/app/outputs
+    environment:
+      - TZ=Europe/Madrid
+      - PROJECT_DOMAIN=domain2.com
+    restart: unless-stopped
+    networks:
+      - seo-network
+
+  # Domain 3 - third Site
+  seo-agent-domain3:
+    build: .
+    container_name: seo-mcp-domain-3
+    volumes:
+      - ./inputs/.env.domain3:/app/.env:ro
+      - ./inputs/ga4-domain3.json:/app/inputs/ga4-credentials.json:ro
+      - ./inputs/gsc-domain3.json:/app/inputs/gsc-credentials.json:ro
+      - ./project-domain-3:/app/project:rw
+      - ./outputs-domain-3:/app/outputs
+    environment:
+      - TZ=Europe/Madrid
+      - PROJECT_DOMAIN=domain3.com
+    restart: unless-stopped
+    networks:
+      - seo-network
+
+networks:
+  seo-network:
+    driver: bridge
